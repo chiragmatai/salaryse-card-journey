@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SalarySe Level Up — Card Application Journey</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#111;color:#fff;min-height:100vh;padding:24px 16px;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+.logo-text{font-size:20px;font-weight:700;letter-spacing:-0.5px;}
+.logo-text span{color:#4f6aff;}
+.nav-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.nav-pill{padding:7px 16px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#aaa;transition:all 0.2s;}
+.nav-pill.active{background:rgba(79,106,255,0.2);color:#7a99ff;border-color:rgba(79,106,255,0.5);font-weight:500;}
+.screen{display:none;}
+.screen.active{display:block;}
+.section-title{font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;}
+.section-sub{font-size:12px;color:#7a8bb5;line-height:1.6;margin-bottom:20px;}
+.phone-wrap{display:flex;gap:24px;align-items:flex-start;overflow-x:auto;padding-bottom:16px;scroll-snap-type:x mandatory;}
+.phone-col{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
+.screen-label{font-size:11px;font-weight:500;color:#556;display:flex;align-items:center;gap:5px;}
+.screen-label i{font-size:13px;}
+.phone-frame{flex:0 0 300px;width:300px;background:#0B0D1A;border-radius:36px;border:2px solid #1e2240;padding:10px 7px;scroll-snap-align:start;box-shadow:0 0 0 1px #2a2f5a,0 20px 60px rgba(0,0,0,0.6);}
+.phone-notch{width:70px;height:18px;background:#0B0D1A;border-radius:0 0 12px 12px;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;}
+.phone-notch-bar{width:44px;height:4px;background:#1e2240;border-radius:4px;}
+.phone-content{background:linear-gradient(160deg,#0d1033 0%,#0f1845 50%,#0a0f2e 100%);border-radius:26px;min-height:540px;overflow:hidden;}
+.pscreen-header{background:linear-gradient(180deg,#1a2060 0%,#101540 100%);padding:14px 14px 10px;text-align:center;}
+.logo-sm{font-size:15px;font-weight:700;color:#fff;letter-spacing:-0.5px;}
+.logo-sm span{color:#4f6aff;}
+.tagline{font-size:8px;color:#8899dd;margin-top:2px;}
+.pscreen-body{padding:13px 13px 18px;}
+.progress-bar-wrap{height:3px;background:rgba(255,255,255,0.08);border-radius:3px;margin-bottom:14px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:#4f6aff;border-radius:3px;}
+.journey-steps{display:flex;justify-content:space-between;margin-bottom:16px;position:relative;}
+.journey-steps::before{content:'';position:absolute;top:11px;left:8%;right:8%;height:1px;background:rgba(255,255,255,0.08);}
+.j-step{display:flex;flex-direction:column;align-items:center;gap:3px;z-index:1;flex:1;}
+.j-dot{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;color:#445;}
+.j-dot.done{background:#1a3a1a;border-color:#2d7a2d;color:#5ebb5e;}
+.j-dot.active{background:#1a2060;border-color:#4f6aff;color:#4f6aff;}
+.j-label{font-size:7px;color:#445;text-align:center;}
+.j-label.active{color:#7a99ff;}
+.field-label{font-size:9px;color:#7a8bb5;margin-bottom:3px;display:flex;align-items:center;gap:2px;}
+.req{color:#ff6b6b;}
+.field-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:9px;padding:9px 11px;font-size:11px;color:#fff;margin-bottom:9px;font-family:inherit;outline:none;}
+.field-input:focus{border-color:#4f6aff;background:rgba(79,106,255,0.08);}
+.field-input::placeholder{color:#3a4060;}
+.field-row{display:flex;gap:7px;margin-bottom:0;}
+.field-row>div{flex:1;}
+.primary-btn{width:100%;background:#4f6aff;color:#fff;border:none;border-radius:11px;padding:12px;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:0.2px;font-family:inherit;}
+.primary-btn.green{background:#22c55e;}
+.secondary-btn{width:100%;background:transparent;color:#7a99ff;border:1px solid rgba(79,106,255,0.35);border-radius:11px;padding:10px;font-size:11px;cursor:pointer;margin-top:7px;font-family:inherit;}
+.otp-note{background:rgba(79,106,255,0.1);border:1px solid rgba(79,106,255,0.2);border-radius:8px;padding:7px 9px;font-size:9px;color:#7a99ff;margin-bottom:12px;display:flex;align-items:flex-start;gap:5px;line-height:1.5;}
+.otp-boxes{display:flex;gap:7px;justify-content:center;margin-bottom:12px;}
+.otp-box{width:36px;height:42px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:9px;font-size:17px;color:#fff;text-align:center;font-family:inherit;outline:none;}
+.otp-box:focus{border-color:#4f6aff;}
+.benefit-chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
+.chip{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:4px 8px;font-size:9px;color:#aab8ee;}
+.bre-card{background:linear-gradient(135deg,#1a2870 0%,#0d1a5a 100%);border:1px solid #2a3680;border-radius:13px;padding:14px;margin-bottom:11px;text-align:center;}
+.bre-limit{font-size:26px;font-weight:700;color:#fff;letter-spacing:-1px;}
+.confetti-dots{display:flex;justify-content:center;gap:4px;margin-bottom:9px;}
+.c-dot{width:6px;height:6px;border-radius:50%;}
+.breadcrumb-card{background:rgba(79,255,130,0.07);border:1px solid rgba(79,255,130,0.2);border-radius:9px;padding:9px 11px;margin-bottom:11px;display:flex;align-items:flex-start;gap:7px;}
+.bc-icon{font-size:15px;color:#4fff82;flex-shrink:0;margin-top:1px;}
+.bc-title{font-size:10px;font-weight:600;color:#4fff82;}
+.bc-sub{font-size:8px;color:#7ab585;margin-top:2px;line-height:1.4;}
+.card-option{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:11px;padding:11px;margin-bottom:7px;cursor:pointer;position:relative;}
+.card-option.selected{border-color:#4f6aff;background:rgba(79,106,255,0.08);}
+.card-opt-recommended{display:none;background:rgba(79,106,255,0.2);border:1px solid rgba(79,106,255,0.4);border-radius:20px;padding:2px 7px;font-size:8px;color:#7a99ff;position:absolute;top:-8px;left:11px;}
+.card-option.selected .card-opt-recommended{display:inline-flex;}
+.card-opt-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.card-opt-name{font-size:11px;font-weight:600;color:#fff;}
+.card-opt-price{font-size:10px;color:#7a8bb5;}
+.card-opt-benefits{display:flex;gap:5px;flex-wrap:wrap;}
+.mini-chip{background:rgba(255,255,255,0.05);border-radius:4px;padding:2px 5px;font-size:8px;color:#8899cc;}
+.mini-chip.lost{color:#ff6b6b;background:rgba(255,80,80,0.08);}
+.downgrade-warning{background:rgba(255,120,50,0.1);border:1px solid rgba(255,120,50,0.25);border-radius:8px;padding:8px 10px;font-size:9px;color:#ffaa77;margin-bottom:9px;line-height:1.5;}
+.savings-banner{background:linear-gradient(90deg,rgba(79,106,255,0.15) 0%,rgba(79,160,255,0.1) 100%);border:1px solid rgba(79,106,255,0.3);border-radius:9px;padding:9px 11px;margin-bottom:13px;display:flex;justify-content:space-between;align-items:center;}
+.savings-label{font-size:9px;color:#7a99ff;}
+.savings-amount{font-size:14px;font-weight:700;color:#5af;}
+.radio-row{display:flex;gap:7px;margin-bottom:9px;}
+.radio-opt{flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:7px;text-align:center;font-size:10px;color:#8899cc;cursor:pointer;}
+.radio-opt.selected{border-color:#4f6aff;background:rgba(79,106,255,0.12);color:#7a99ff;}
+.radio-col{display:flex;flex-direction:column;gap:6px;margin-bottom:11px;}
+.radio-col .radio-opt{text-align:left;flex:none;}
+.trust-row{display:flex;justify-content:center;gap:12px;margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.05);}
+.trust-item{display:flex;align-items:center;gap:3px;font-size:8px;color:#445;}
+.hero-number{font-size:30px;font-weight:800;color:#fff;letter-spacing:-1px;}
+.steps-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:9px;padding:9px;margin-bottom:13px;}
+.step-row{display:flex;align-items:center;gap:7px;margin-bottom:6px;}
+.step-row:last-child{margin-bottom:0;}
+.step-num{width:17px;height:17px;background:#4f6aff;border-radius:50%;font-size:8px;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-num.dim{background:rgba(79,106,255,0.2);border:1px solid rgba(79,106,255,0.3);color:#7a99ff;}
+.step-text{font-size:9px;color:#aab8ee;}
+.step-text.dim{color:#445;}
+.prefill-note{font-size:8px;color:#4fff82;margin-top:-6px;margin-bottom:7px;}
+.variant-toggle{display:flex;gap:7px;margin-bottom:14px;}
+.variant-btn{flex:1;padding:8px;border-radius:9px;font-size:10px;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#7a8bb5;font-family:inherit;}
+.variant-btn.active{border-color:#4f6aff;background:rgba(79,106,255,0.15);color:#7a99ff;font-weight:600;}
+@media(max-width:600px){
+  body{padding:16px 12px;}
+  .phone-frame{flex:0 0 280px;width:280px;}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo-text">salary<span>se</span></div>
+  <div style="font-size:11px;color:#445;">card application journey · prototype</div>
+</div>
+
+<div class="nav-pills">
+  <div class="nav-pill active" onclick="showScreen(0)">1 · Landing</div>
+  <div class="nav-pill" onclick="showScreen(1)">2 · OTP verify</div>
+  <div class="nav-pill" onclick="showScreen(2)">3 · Soft BRE</div>
+  <div class="nav-pill" onclick="showScreen(3)">4 · Card select</div>
+  <div class="nav-pill" onclick="showScreen(4)">5 · Application form</div>
+</div>
+
+<!-- SCREEN 1: LANDING -->
+<div class="screen active" id="s0">
+  <div class="section-title">Landing — value prop first, lead capture second</div>
+  <p class="section-sub">Hero communicates ₹38,000+ annual savings. Journey timeline is visible before the phone field. OTP CTA is explicitly framed as "start applying."</p>
+  <div class="phone-wrap">
+    <div class="phone-col">
+      <div class="screen-label"><i class="ti ti-device-mobile"></i> Landing screen</div>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="phone-notch-bar"></div></div>
+        <div class="phone-content">
+          <div class="pscreen-header">
+            <div class="logo-sm">salary<span>se</span> <span style="font-size:8px;background:rgba(79,106,255,0.2);border:1px solid rgba(79,106,255,0.4);border-radius:20px;padding:2px 6px;color:#7a99ff;font-weight:400;vertical-align:middle;">Level Up</span></div>
+            <div class="tagline">India's first credit card for salaried achievers</div>
+          </div>
+          <div class="pscreen-body">
+            <div style="text-align:center;margin-bottom:14px;">
+              <div style="font-size:9px;color:#7a8bb5;margin-bottom:3px;">estimated annual savings</div>
+              <div class="hero-number">₹38,000+</div>
+              <div style="font-size:9px;color:#4f9fff;">across dining, travel &amp; subscriptions</div>
+            </div>
+            <div class="benefit-chips">
+              <div class="chip">✈️ airport lounge</div>
+              <div class="chip">🍔 20% Swiggy</div>
+              <div class="chip">🎬 OTT access</div>
+              <div class="chip">⛽ fuel waiver</div>
+            </div>
+            <div class="steps-box">
+              <div style="font-size:8px;color:#7a8bb5;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">your journey — 4 steps · ~5 mins</div>
+              <div class="step-row"><div class="step-num">1</div><div class="step-text">verify mobile number via OTP</div></div>
+              <div class="step-row"><div class="step-num dim">2</div><div class="step-text dim">check eligibility in 30 sec</div></div>
+              <div class="step-row"><div class="step-num dim">3</div><div class="step-text dim">pick your card variant</div></div>
+              <div class="step-row"><div class="step-num dim">4</div><div class="step-text dim">complete application form</div></div>
+            </div>
+            <div class="field-label">mobile number <span class="req">*</span></div>
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:9px;padding:9px 9px;font-size:11px;color:#7a8bb5;flex-shrink:0;">+91</div>
+              <input class="field-input" style="margin-bottom:0;flex:1;" placeholder="enter mobile number" />
+            </div>
+            <button class="primary-btn">get OTP to start applying →</button>
+            <div class="trust-row">
+              <div class="trust-item"><i class="ti ti-shield-check" style="font-size:10px;"></i> 100% secure</div>
+              <div class="trust-item"><i class="ti ti-certificate" style="font-size:10px;"></i> PCI DSS</div>
+              <div class="trust-item"><i class="ti ti-award" style="font-size:10px;"></i> ISO 27001</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2: OTP -->
+<div class="screen" id="s1">
+  <div class="section-title">OTP verification — purpose is explicit</div>
+  <p class="section-sub">User knows they're verifying specifically to apply for the Level Up card. The context note makes the purpose unambiguous.</p>
+  <div class="phone-wrap">
+    <div class="phone-col">
+      <div class="screen-label"><i class="ti ti-device-mobile"></i> OTP screen</div>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="phone-notch-bar"></div></div>
+        <div class="phone-content">
+          <div class="pscreen-header">
+            <div class="logo-sm">salary<span>se</span></div>
+            <div class="tagline">India's first credit card for salaried achievers</div>
+          </div>
+          <div class="pscreen-body">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:25%;"></div></div>
+            <div class="journey-steps">
+              <div class="j-step"><div class="j-dot active"><i class="ti ti-lock" style="font-size:8px;"></i></div><div class="j-label active">verify</div></div>
+              <div class="j-step"><div class="j-dot">2</div><div class="j-label">eligibility</div></div>
+              <div class="j-step"><div class="j-dot">3</div><div class="j-label">card</div></div>
+              <div class="j-step"><div class="j-dot">4</div><div class="j-label">apply</div></div>
+            </div>
+            <div style="text-align:center;margin-bottom:18px;">
+              <div style="width:44px;height:44px;background:rgba(79,106,255,0.15);border:1px solid rgba(79,106,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 9px;">
+                <i class="ti ti-message-dots" style="font-size:20px;color:#4f6aff;"></i>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:4px;">verify to apply for your card</div>
+              <div style="font-size:9px;color:#7a8bb5;line-height:1.5;">we've sent a 6-digit OTP to<br><span style="color:#aab8ee;">+91 98765 43210</span></div>
+            </div>
+            <div class="otp-note">
+              <i class="ti ti-info-circle" style="font-size:11px;flex-shrink:0;margin-top:1px;"></i>
+              <span>your OTP confirms you're applying for the SalarySe Level Up card</span>
+            </div>
+            <div class="otp-boxes">
+              <input class="otp-box" maxlength="1" value="4" />
+              <input class="otp-box" maxlength="1" value="2" />
+              <input class="otp-box" maxlength="1" value="1" />
+              <input class="otp-box" maxlength="1" />
+              <input class="otp-box" maxlength="1" />
+              <input class="otp-box" maxlength="1" />
+            </div>
+            <button class="primary-btn" style="margin-bottom:8px;">verify &amp; check eligibility →</button>
+            <div style="text-align:center;font-size:9px;color:#445;margin-top:7px;">resend OTP in <span style="color:#7a99ff;">00:28</span></div>
+            <div class="trust-row">
+              <div class="trust-item"><i class="ti ti-shield-check" style="font-size:10px;"></i> 100% secure</div>
+              <div class="trust-item"><i class="ti ti-certificate" style="font-size:10px;"></i> PCI DSS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 3: SOFT BRE -->
+<div class="screen" id="s2">
+  <div class="section-title">Soft BRE — 2 inputs, instant personalised offer</div>
+  <p class="section-sub">Only PAN + pincode needed. No CIBIL impact. Success state delivers the delight moment — personalised credit limit with a green breadcrumb before moving to card selection.</p>
+  <div class="phone-wrap">
+    <div class="phone-col">
+      <div class="screen-label"><i class="ti ti-device-mobile"></i> BRE input</div>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="phone-notch-bar"></div></div>
+        <div class="phone-content">
+          <div class="pscreen-header"><div class="logo-sm">salary<span>se</span></div></div>
+          <div class="pscreen-body">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:50%;"></div></div>
+            <div class="journey-steps">
+              <div class="j-step"><div class="j-dot done"><i class="ti ti-check" style="font-size:8px;"></i></div><div class="j-label">verified</div></div>
+              <div class="j-step"><div class="j-dot active"><i class="ti ti-sparkles" style="font-size:8px;"></i></div><div class="j-label active">eligibility</div></div>
+              <div class="j-step"><div class="j-dot">3</div><div class="j-label">card</div></div>
+              <div class="j-step"><div class="j-dot">4</div><div class="j-label">apply</div></div>
+            </div>
+            <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">check your eligibility</div>
+            <div style="font-size:9px;color:#7a8bb5;line-height:1.5;margin-bottom:13px;">just 2 fields — result in under 30 sec. no credit score impact.</div>
+            <div class="field-label">PAN number <span class="req">*</span></div>
+            <input class="field-input" placeholder="e.g. ABCDE1234F" value="RHEAS1234T" />
+            <div class="field-label">current pincode <span class="req">*</span></div>
+            <input class="field-input" placeholder="6-digit pincode" value="110001" />
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 10px;margin-bottom:13px;font-size:9px;color:#445;line-height:1.5;">
+              <i class="ti ti-shield-check" style="font-size:10px;color:#4f9fff;vertical-align:-1px;"></i> we run a <strong style="color:#7a8bb5;">soft enquiry</strong> only — your CIBIL score is not affected
+            </div>
+            <button class="primary-btn">check my eligibility →</button>
+            <div class="trust-row">
+              <div class="trust-item"><i class="ti ti-eye-off" style="font-size:10px;"></i> no hard enquiry</div>
+              <div class="trust-item"><i class="ti ti-clock" style="font-size:10px;"></i> result in 30 sec</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-col">
+      <div class="screen-label"><i class="ti ti-sparkles"></i> Eligibility result — delight moment</div>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="phone-notch-bar"></div></div>
+        <div class="phone-content">
+          <div class="pscreen-header"><div class="logo-sm">salary<span>se</span></div></div>
+          <div class="pscreen-body">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:50%;"></div></div>
+            <div class="confetti-dots">
+              <div class="c-dot" style="background:#4f6aff;"></div>
+              <div class="c-dot" style="background:#4fff82;"></div>
+              <div class="c-dot" style="background:#ffcc44;"></div>
+              <div class="c-dot" style="background:#ff6b9d;"></div>
+              <div class="c-dot" style="background:#4f6aff;"></div>
+            </div>
+            <div class="bre-card">
+              <div style="font-size:10px;color:#7a8bb5;margin-bottom:5px;">🎉 congratulations, Rhea!</div>
+              <div style="font-size:9px;color:#7a8bb5;margin-bottom:4px;">you're eligible for a credit limit up to</div>
+              <div class="bre-limit">₹3,50,000</div>
+              <div style="font-size:8px;color:#4f9fff;margin-top:4px;">based on your profile · subject to final verification</div>
+            </div>
+            <div class="breadcrumb-card">
+              <i class="ti ti-circle-check bc-icon"></i>
+              <div>
+                <div class="bc-title">soft check complete — score safe</div>
+                <div class="bc-sub">PAN + pincode verified. no CIBIL impact. now pick your card variant.</div>
+              </div>
+            </div>
+            <button class="primary-btn">pick my card →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4: CARD SELECTION -->
+<div class="screen" id="s3">
+  <div class="section-title">Card selection — no mis-sell, clear trade-offs</div>
+  <p class="section-sub">Toggle between two ad-arrival states. LTF arrival: free card pre-selected, paid is an upgrade. Paid arrival: Plus pre-selected, downgrade shows explicit benefit losses.</p>
+  <div style="margin-bottom:16px;">
+    <div class="variant-toggle" style="max-width:400px;">
+      <button class="variant-btn active" id="vLTF" onclick="setVariant('ltf')">arrived via LTF ad</button>
+      <button class="variant-btn" id="vPaid" onclick="setVariant('paid')">arrived via paid card ad</button>
+    </div>
+  </div>
+  <div class="phone-wrap">
+    <div class="phone-col" id="ltfPhone">
+      <div class="screen-label"><i class="ti ti-tag"></i> LTF ad arrival — free card pre-selected</div>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="phone-notch-bar"></div></div>
+        <div class="phone-content">
+          <div class="pscreen-header"><div class="logo-sm">salary<span>se</span></div></div>
+          <div class="pscreen-body">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:75%;"></div></div>
+            <div class="journey-steps">
+              <div class="j-step"><div class="j-dot done"><i class="ti ti-check" style="font-size:8px;"></i></div><div class="j-label">verified</div></div>
+              <div class="j-step"><div class="j-dot done"><i class="ti ti-check" style="font-size:8px;"></i></div><div class="j-label">eligible</div></div>
+              <div class="j-step"><div class="j-dot active"><i class="ti ti-credit-card" style="font-size:8px;"></i></div><div class="j-label active">card</div></div>
+              <div class="j-step"><div class="j-dot">4</div><div class="j-label">apply</div></div>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;">choose your Level Up card</div>
+            <div style="font-size:9px;color:#7a8bb5;margin-bottom:11px;">limit: <span style="color:#5af;">₹3,50,000</span></div>
+            <div class="card-option selected">
+              <div class="card-opt-recommended">recommended</div>
+              <div class="card-opt-header">
+                <div class="card-opt-name">Level Up LTF <span style="font-size:8px;background:rgba(79,255,130,0.12);border:1px solid rgba(79,255,130,0.25);border-radius:4px;padding:2px 5px;color:#4fff82;">free forever</span></div>
+                <div class="card-opt-price">₹0/yr</div>
+              </div>
+              <div class="card-opt-benefits">
+                <div class="mini-chip">1% cashback</div>
+                <div class="mini-chip">2 lounge visits</div>
+                <div class="mini-chip">fuel waiver</div>
+                <div class="mini-chip">Swiggy 10%</div>
+              </div>
+            </div>
+            <div class="card-option">
+              <div class="card-opt-header">
+                <div class="card-opt-name">Level Up Plus</div>
+                <div class="card-opt-price">₹499/yr</div>
+              </div>
+              <div class="card-opt-benefits">
+                <div class="mini-chip">3% cashback</div>
+                <div class="mini-chip">8 lounge visits</div>
+                <div class="mini-chip">OTT bundle</div>
+                <div class="mini-chip">Swiggy 20%</div>
+                <div class="mini-chip">travel insurance</div>
+              </div>
+            </div>
+            <div style="height:9px;"></div>
+            <button class="primary-btn" style="margin-bottom:7px;">get my card for free →</button>
+            <button class="secondary-btn">upgrade to Plus at ₹499 →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-col" id="paidPhone" style="display:none;">
+      <div class="screen-label"><i class="ti ti-ad-2"></i> Paid card ad arrival — Plus pre-selected</div>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="phone-notch-bar"></div></div>
+        <div class="phone-content">
+          <div class="pscreen-header"><div class="logo-sm">salary<span>se</span></div></div>
+          <div class="pscreen-body">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:75%;"></div></div>
+            <div class="journey-steps">
+              <div class="j-step"><div class="j-dot done"><i class="ti ti-check" style="font-size:8px;"></i></div><div class="j-label">verified</div></div>
+              <div class="j-step"><div class="j-dot done"><i class="ti ti-check" style="font-size:8px;"></i></div><div class="j-label">eligible</div></div>
+              <div class="j-step"><div class="j-dot active"><i class="ti ti-credit-card" style="font-size:8px;"></i></div><div class="j-label active">card</div></div>
+              <div class="j-step"><div class="j-dot">4</div><div class="j-label">apply</div></div>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;">your Level Up Plus</div>
+            <div style="font-size:9px;color:#7a8bb5;margin-bottom:11px;">limit: <span style="color:#5af;">₹3,50,000</span></div>
+            <div class="card-option selected">
+              <div class="card-opt-recommended">your selection</div>
+              <div class="card-opt-header">
+                <div class="card-opt-name">Level Up Plus</div>
+                <div class="card-opt-price">₹499/yr</div>
+              </div>
+              <div class="card-opt-benefits">
+                <div class="mini-chip">3% cashback</div>
+                <div class="mini-chip">8 lounge visits</div>
+                <div class="mini-chip">OTT bundle</div>
+                <div class="mini-chip">Swiggy 20%</div>
+                <div class="mini-chip">travel insurance</div>
+              </div>
+            </div>
+            <div class="downgrade-warning">
+              <i class="ti ti-alert-triangle" style="font-size:10px;vertical-align:-1px;"></i> switching to LTF means losing: 8 lounge → 2, 3% cashback → 1%, OTT bundle removed, travel insurance removed
+            </div>
+            <div class="card-option">
+              <div class="card-opt-header">
+                <div class="card-opt-name">Level Up LTF</div>
+                <div class="card-opt-price">₹0/yr</div>
+              </div>
+              <div class="card-opt-benefits">
+                <div class="mini-chip">1% cashback</div>
+                <div class="mini-chip">2 lounge visits</div>
+                <div class="mini-chip lost">no OTT</div>
+                <div class="mini-chip lost">no insurance</div>
+              </div>
+            </div>
+            <button class="primary-btn" style="margin-bottom:7px;">continue with Plus →</button>
+            <button class="secondary-btn">get card for free instead</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 5: FORM -->
+<div class="screen" id="s4">
+  <div class="section-title">Application form — value prop anchored, form chunked into 3 steps</div>
+  <p class="section-sub">Annual savings banner stays visible throughout. Pincode pre-fills from BRE. Green breadcrumbs mark section completions and keep momentum.</p>
+  <div class="phone-wrap">
+    <div class="phone-col">
+      <div class="screen-label"><i class="ti ti-user"></i> 1 of 3 · personal details</div>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="phone-notch-bar"></div></div>
+        <div class="phone-content">
+          <div class="pscreen-header"><div class="logo-sm">salary<span>se</span></div></div>
+          <div class="pscreen-body">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:80%;"></div></div>
+            <div class="journey-steps">
+              <div class="j-step"><div class="j-dot done"><i class="ti ti-check" style="font-size:8px;"></i></div><div class="j-label">verified</div></div>
+              <div class="j-step"><div class="j-dot done"><i class="ti ti-check" style="font-size:8px;"></i></div><div class="j-label">eligible</div></div>
+              <div class="j-step"><div class="j-dot done"><i class="ti ti-check" style="font-size:8px;"></i></div><div class="j-label">card</div></div>
+              <div class="j-step"><div class="j-dot active"><i class="ti ti-pencil" style="font-size:8px;"></i></div><div class="j-label active">apply</div></div>
+            </div>
+            <div class="savings-banner">
+              <div><div class="savings-label">Level Up Plus · annual savings</div><div style="font-size:8px;color:#445;margin-top:1px;">dining · travel · OTT · fuel</div></div>
+              <div class="savings-amount">₹38,000</div>
+            </div>
+            <div style="font-size:10px;font-weight:600;color:#7a8bb5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:9px;">1 of 3 · personal details</div>
+            <div class="field-row">
+              <div><div class="field-label">first name <span class="req">*</span></div><input class="field-input" value="Rhea" /></div>
+              <div><div class="field-label">last name <span class="req">*</span></div><input class="field-input" value="Shetty" /></div>
+            </div>
+            <div class="field-label">middle name</div>
+            <input class="field-input" placeholder="optional" />
+            <div class="field-label">date of birth <span class="req">*</span></div>
+            <input class="field-input" value="11 / 07 / 1999" />
+            <div class="field-label">gender <span class="req">*</span></div>
+            <div class="radio-row">
+              <div class="radio-opt">male</div>
+              <div class="radio-opt selected">female</div>
+              <div class="radio-opt">other</div>
+            </div>
+            <button class="primary-btn">save &amp; continue →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-col">
+      <div class="screen-label"><i class="ti ti-map-pin"></i> 2 of 3 · contact details</div>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="phone-notch-bar"></div></div>
+        <div class="phone-content">
+          <div class="pscreen-header"><div class="logo-sm">salary<span>se</span></div></div>
+          <div class="pscreen-body">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:88%;"></div></div>
+            <div class="savings-banner">
+              <div><div class="savings-label">Level Up Plus · annual savings</div></div>
+              <div class="savings-amount">₹38,000</div>
+            </div>
+            <div class="breadcrumb-card">
+              <i class="ti ti-circle-check bc-icon"></i>
+              <div>
+                <div class="bc-title">personal details saved</div>
+                <div class="bc-sub">Rhea Shetty · DOB 11 Jul 1999 · step 1 of 3 done</div>
+              </div>
+            </div>
+            <div style="font-size:10px;font-weight:600;color:#7a8bb5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:9px;">2 of 3 · contact details</div>
+            <div class="field-label">personal email <span class="req">*</span></div>
+            <input class="field-input" value="rheashetty104@gmail.com" />
+            <div class="field-label">address line 1 <span class="req">*</span></div>
+            <input class="field-input" value="Sector 15, Part II" />
+            <div class="field-row">
+              <div><div class="field-label">pincode <span class="req">*</span></div><input class="field-input" value="122001" style="color:#4fff82;" /></div>
+              <div><div class="field-label">city</div><input class="field-input" value="Gurugram" /></div>
+            </div>
+            <div class="prefill-note"><i class="ti ti-check" style="font-size:8px;"></i> pre-filled from eligibility check</div>
+            <div class="field-label">ownership status <span class="req">*</span></div>
+            <div class="radio-row">
+              <div class="radio-opt selected">owned</div>
+              <div class="radio-opt">rented</div>
+            </div>
+            <button class="primary-btn">save &amp; continue →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-col">
+      <div class="screen-label"><i class="ti ti-building"></i> 3 of 3 · work details</div>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="phone-notch-bar"></div></div>
+        <div class="phone-content">
+          <div class="pscreen-header"><div class="logo-sm">salary<span>se</span></div></div>
+          <div class="pscreen-body">
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:96%;"></div></div>
+            <div class="savings-banner">
+              <div><div class="savings-label">Level Up Plus · annual savings</div></div>
+              <div class="savings-amount">₹38,000</div>
+            </div>
+            <div class="breadcrumb-card">
+              <i class="ti ti-circle-check bc-icon"></i>
+              <div>
+                <div class="bc-title">2 of 3 done — almost there!</div>
+                <div class="bc-sub">just your work details left to submit</div>
+              </div>
+            </div>
+            <div style="font-size:10px;font-weight:600;color:#7a8bb5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:9px;">3 of 3 · work details</div>
+            <div class="field-label">employment type <span class="req">*</span></div>
+            <div class="radio-row">
+              <div class="radio-opt selected">salaried</div>
+              <div class="radio-opt">self-employed</div>
+            </div>
+            <div class="field-label">company name <span class="req">*</span></div>
+            <input class="field-input" value="SalarySe" />
+            <div class="field-label">industry <span class="req">*</span></div>
+            <input class="field-input" value="Fintech" />
+            <div class="field-label">monthly income <span class="req">*</span></div>
+            <input class="field-input" value="₹ 1,50,000" />
+            <div class="field-label">total work experience <span class="req">*</span></div>
+            <div class="radio-col">
+              <div class="radio-opt">less than 6 months</div>
+              <div class="radio-opt selected">6 – 24 months</div>
+              <div class="radio-opt">more than 24 months</div>
+            </div>
+            <button class="primary-btn green">submit application →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showScreen(idx){
+  document.querySelectorAll('.screen').forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.querySelectorAll('.nav-pill').forEach((p,i)=>p.classList.toggle('active',i===idx));
+}
+function setVariant(v){
+  document.getElementById('ltfPhone').style.display = v==='ltf'?'flex':'none';
+  document.getElementById('paidPhone').style.display = v==='paid'?'flex':'none';
+  document.getElementById('vLTF').classList.toggle('active',v==='ltf');
+  document.getElementById('vPaid').classList.toggle('active',v==='paid');
+}
+document.querySelectorAll('.radio-opt').forEach(el=>{
+  el.addEventListener('click',function(){
+    const siblings = this.closest('.radio-row, .radio-col');
+    if(siblings) siblings.querySelectorAll('.radio-opt').forEach(s=>s.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+</script>
+</body>
+</html>
