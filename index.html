@@ -526,7 +526,9 @@ body{
 
         <div style="height:8px;"></div>
         <button class="btn" id="cardPrimaryBtn" onclick="proceedWithCard()">get my card for free →</button>
-        <button class="btn ghost" id="cardSecondaryBtn" onclick="toggleCardUpgrade()">upgrade to Plus at ₹499 →</button>
+        <div style="text-align:center;margin-top:14px;">
+          <span id="cardSecondaryBtn" onclick="toggleCardUpgrade()" style="font-size:11px;color:#4a5a80;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(79,106,255,0.3);">or upgrade to Plus at ₹499/yr</span>
+        </div>
       </div>
     </div>
   </div>
@@ -844,12 +846,14 @@ function selectCard(type){
 
   if(type === 'ltf'){
     document.getElementById('cardPrimaryBtn').textContent = 'get my card for free →';
-    document.getElementById('cardSecondaryBtn').textContent = 'upgrade to Plus at ₹499 →';
+    document.getElementById('cardSecondaryBtn').textContent = 'or upgrade to Plus at ₹499/yr';
+    document.getElementById('cardSecondaryBtn').style.color = '#4a5a80';
     document.getElementById('downgradeWarn').style.display = 'none';
   } else {
     document.getElementById('cardPrimaryBtn').textContent = 'continue with Plus →';
-    document.getElementById('cardSecondaryBtn').textContent = 'get card for free instead';
-    document.getElementById('downgradeWarn').style.display = 'none';
+    document.getElementById('cardSecondaryBtn').textContent = 'no thanks, get free LTF card instead';
+    document.getElementById('cardSecondaryBtn').style.color = '#7a8bb5';
+    document.getElementById('downgradeWarn').style.display = 'block';
   }
   updateSavingsBanners();
 }
